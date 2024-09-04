@@ -1,3 +1,11 @@
+def split_document_into_chunks():
+    '''
+    split text into smaller chunks so an LLM can process those chunks individually
+    >>> split_document_into_chunks('This is a sentence. \n\nThis is another paragraph.')
+    ['This is a sentence', 'This is another paragraph.']
+    '''
+    pass
+
 import os
 from groq import Groq
 #from dotenv import load_dotenv
