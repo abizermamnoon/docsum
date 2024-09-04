@@ -1,6 +1,6 @@
 # Document Summarizer
 
-![GitHub Actions](https://github.com/username/repository/actions/workflows/python-app.yml/badge.svg)
+[![](https://github.com/abizermamnoon/docsum/workflows/tests/badge.svg)](https://github.com/abizermamnoon/docsum/actions?query=workflow%3Atests)
 
 `docsum.py` is a simple Python script that extracts text from a file, summarizes it using the Groq API, and prints the summary at a first-grade reading level.
 
