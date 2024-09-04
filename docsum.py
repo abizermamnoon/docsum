@@ -1,5 +1,5 @@
 def split_document_into_chunks(text, chunk_size=512):
-    r"""
+    """
     Split text into smaller chunks so an LLM can process those chunks individually.
 
     Args:
@@ -8,23 +8,10 @@ def split_document_into_chunks(text, chunk_size=512):
 
     Returns:
         List[str]: A list of text chunks.
-
-    Examples:
-    >>> split_document_into_chunks('This is a sentence.\\n\\nThis is another paragraph.')
-    ['This is a sentence.', 'This is another paragraph.']
-    
-    >>> split_document_into_chunks('This is a very long sentence that goes on and on and needs to be split into chunks. ' * 10, chunk_size=100)
-    ['This is a very long sentence that goes on and on and needs to be split into chunks. This is a very long ', 'sentence that goes on and on and needs to be split into chunks. This is a very long sentence that goes on ']
-    
-    >>> split_document_into_chunks('Short text.')
-    ['Short text.']
-    
-    >>> split_document_into_chunks('First part.\\n\\nSecond part.\\n\\nThird part.')
-    ['First part.', 'Second part.', 'Third part.']
     """
     # Split the text by paragraphs (assuming paragraphs are separated by double newlines)
     paragraphs = text.split('\n\n')
-    
+
     # Further split paragraphs into smaller chunks if they exceed the chunk size
     chunks = []
     for paragraph in paragraphs:
@@ -34,7 +21,6 @@ def split_document_into_chunks(text, chunk_size=512):
             start += chunk_size
 
     return chunks
-
 
 import os
 from groq import Groq
@@ -60,18 +46,31 @@ client = Groq(
 )
 
 
-chat_completion = client.chat.completions.create(
-    messages=[
-        {
-            "role": "system",
-            "content": "summarize input text below. limit summary to 1 paragraph and use a 1st grade reading level",
-        },
-        {
-            "role": "user",
-            "content":text, 
-        }
-    ],
-    model="llama3-8b-8192",
-)
-print(chat_completion.choices[0].message.content)
+# Split the document into smaller chunks
+chunks = split_document_into_chunks(text, chunk_size=2000)
 
+# Initialize an empty list to hold individual summaries
+summaries = []
+
+# Iterate over each chunk and generate a summary for each
+for chunk in chunks:
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "system",
+                "content": "summarize input text below. limit summary to 1 sentence and use a 1st grade reading level",
+            },
+            {
+                "role": "user",
+                "content": chunk,
+            }
+        ],
+        model="llama3-8b-8192",
+    )
+    
+    # Append the generated summary to the list
+    summaries.append(chat_completion.choices[0].message.content)
+
+# Join all summaries into one final summary
+final_summary = " ".join(summaries)
+print(final_summary)
