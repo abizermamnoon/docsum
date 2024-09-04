@@ -32,4 +32,4 @@ jobs:
         run: |
           python3 docsum.py docs/declaration.txt
           python3 docsum.py docs/news-mx.txt
-          for file in docs/*; do python3 docsum.py ${file}; done
+          for file in docs/*; do python3 docsum.py "$file"; done
