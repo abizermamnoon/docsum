@@ -30,6 +30,10 @@ Create a .env file and add your GROQ_API_KEY
 GROQ_API_KEY=your_api_key_here
 ```
 
+```
+$ export $(cat .env)
+```
+
 ## Usage
 
 ```
@@ -39,9 +43,7 @@ $ python3 docsum.py <file_path>
 For example:
 ```
 $ python3 docsum.py docs/'Abizer Mamnoon Resume.pdf'
-```
 
-```
 Here is a summary of the text in one paragraph, written at a 1st-grade reading level:
 
 Abizer is a student at Claremont McKenna College who is very smart in computer science and economics. He has worked on many projects and helped write articles about important topics like economics. Abizer is good at coding languages like Python and R, and he has even built big data models to help people make better decisions. He is also good at designing things like websites and chatbots. Abizer likes to learn new things and build new projects, and he is very good at what he does.

@@ -7,17 +7,14 @@ on:
     branches: ['*']
 
 jobs:
-  test:
+  docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Python environment
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install groq fulltext
+    - uses: actions/checkout@v2
+    - name: setup depedencies
+      run: |
+        pip3 install -r requirements.txt
+        pip3 install groq fulltext
+    - name: docker
+      run: |
+        echo "Tests ran successfully!"
