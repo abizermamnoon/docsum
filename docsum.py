@@ -1,10 +1,40 @@
-def split_document_into_chunks():
-    '''
-    split text into smaller chunks so an LLM can process those chunks individually
-    >>> split_document_into_chunks('This is a sentence. \n\nThis is another paragraph.')
-    ['This is a sentence', 'This is another paragraph.']
-    '''
-    pass
+def split_document_into_chunks(text, chunk_size=512):
+    r"""
+    Split text into smaller chunks so an LLM can process those chunks individually.
+
+    Args:
+        text (str): The input text to split into chunks.
+        chunk_size (int): The maximum size of each chunk in terms of characters.
+
+    Returns:
+        List[str]: A list of text chunks.
+
+    Examples:
+    >>> split_document_into_chunks('This is a sentence.\\n\\nThis is another paragraph.')
+    ['This is a sentence.', 'This is another paragraph.']
+    
+    >>> split_document_into_chunks('This is a very long sentence that goes on and on and needs to be split into chunks. ' * 10, chunk_size=100)
+    ['This is a very long sentence that goes on and on and needs to be split into chunks. This is a very long ', 'sentence that goes on and on and needs to be split into chunks. This is a very long sentence that goes on ']
+    
+    >>> split_document_into_chunks('Short text.')
+    ['Short text.']
+    
+    >>> split_document_into_chunks('First part.\\n\\nSecond part.\\n\\nThird part.')
+    ['First part.', 'Second part.', 'Third part.']
+    """
+    # Split the text by paragraphs (assuming paragraphs are separated by double newlines)
+    paragraphs = text.split('\n\n')
+    
+    # Further split paragraphs into smaller chunks if they exceed the chunk size
+    chunks = []
+    for paragraph in paragraphs:
+        start = 0
+        while start < len(paragraph):
+            chunks.append(paragraph[start:start + chunk_size].strip())
+            start += chunk_size
+
+    return chunks
+
 
 import os
 from groq import Groq
