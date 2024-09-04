@@ -1,4 +1,4 @@
-def split_document_into_chunks(text, chunk_size=512):
+def split_document_into_chunks(text, chunk_size=1024):
     """
     Split text into smaller chunks so an LLM can process those chunks individually.
 
@@ -47,7 +47,7 @@ client = Groq(
 
 
 # Split the document into smaller chunks
-chunks = split_document_into_chunks(text, chunk_size=2000)
+chunks = split_document_into_chunks(text)
 
 # Initialize an empty list to hold individual summaries
 summaries = []
@@ -72,5 +72,6 @@ for chunk in chunks:
     summaries.append(chat_completion.choices[0].message.content)
 
 # Join all summaries into one final summary
-final_summary = " ".join(summaries)
+# Join all summaries into one final summary
+final_summary = f"This is a summary of the file '{args.filename}': " + " ".join(summaries)
 print(final_summary)
