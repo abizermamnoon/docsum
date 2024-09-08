@@ -1,4 +1,4 @@
-def split_document_into_chunks(text, chunk_size=1024):
+def split_document_into_chunks(text, chunk_size=10000):
     """
     Split text into smaller chunks so an LLM can process those chunks individually.
 
@@ -10,16 +10,18 @@ def split_document_into_chunks(text, chunk_size=1024):
         List[str]: A list of text chunks.
     """
     # Split the text by paragraphs (assuming paragraphs are separated by double newlines)
-    paragraphs = text.split('\n\n')
+    #paragraphs = text.split('\n\n')
 
     # Further split paragraphs into smaller chunks if they exceed the chunk size
-    chunks = []
-    for paragraph in paragraphs:
-        start = 0
-        while start < len(paragraph):
-            chunks.append(paragraph[start:start + chunk_size].strip())
-            start += chunk_size
+    #chunks = []
+    #for paragraph in text:
+    #    start = 0
+    #    while start < len(paragraph):
+    #        chunks.append(paragraph[start:start + chunk_size].strip())
+    #        start += chunk_size
 
+    #return chunks
+    chunks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
     return chunks
 
 import os
@@ -27,6 +29,7 @@ from groq import Groq
 #from dotenv import load_dotenv
 import argparse
 import fulltext
+import chardet
 #filename = 'docs/declaration'
 #with open(args.filename) as f:
 #    text = f.read()
@@ -37,7 +40,27 @@ parser.add_argument('filename')
 args = parser.parse_args()
 
 # Use fulltext to extract text from the file
-text = fulltext.get(args.filename)
+try:
+    # Try using fulltext to extract text from the file
+    text = fulltext.get(args.filename)
+except (UnicodeDecodeError, Exception) as e:
+    print(f"fulltext failed: {e}")
+    print("Attempting to detect encoding with chardet...")
+
+    # Fallback to using chardet to detect encoding and read the file
+    try:
+        with open(args.filename, 'rb') as f:
+            result = chardet.detect(f.read())
+            charenc = result['encoding']
+            print(f"Detected encoding: {charenc}")
+
+            # Read the file with the detected encoding
+            with open(args.filename, 'r', encoding=charenc) as f:
+                text = f.read()
+    except Exception as e:
+        print(f"Failed to read the file even after detecting encoding: {e}")
+        exit(1)
+
 #print(os.environ.get("GROQ_API_KEY"))
 # Initialize Groq client with API key
 client = Groq(
