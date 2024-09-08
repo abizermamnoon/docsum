@@ -27,7 +27,9 @@ jobs:
           sudo apt-get install -y poppler-utils
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install groq fulltext chardet
       - name: test declaration
         run: |
-          for file in docs/*; do python3 docsum.py "$file"; done
+          python3 docsum.py docs/declaration
+          python3 docsum.py docs/constitution-mx.txt
+          python3 docsum.py docs/2023.findings-emnlp.945.pdf
+          python3 docsum.py docs/hamlet.txt

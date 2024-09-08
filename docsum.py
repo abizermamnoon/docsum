@@ -1,4 +1,4 @@
-def split_document_into_chunks(text, chunk_size=10000):
+def split_document_into_chunks(text, chunk_size=5000):
     """
     Split text into smaller chunks so an LLM can process those chunks individually.
 
